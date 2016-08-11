@@ -680,10 +680,6 @@
             position: place.geometry.location,
             id: place.id
           });
-          // If a marker is clicked, do a place details search on it in the next function.
-          marker.addListener('click', function() {
-          getPlacesDetails(this, place);
-          });
           placeMarkers.push(marker);
           if (place.geometry.viewport) {
             // Only geocodes have viewport.
