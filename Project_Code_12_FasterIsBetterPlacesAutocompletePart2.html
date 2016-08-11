@@ -694,28 +694,6 @@
         }
         map.fitBounds(bounds);
       }
-
-    // This function creates a marker for each place found in either places search.
-    function createMarkersForPlaces(place) {
-      var icon = {
-        url: place.icon,
-        size: new google.maps.Size(35, 35),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(15, 34),
-        scaledSize: new google.maps.Size(25, 25)
-      };
-
-      // Create a marker for each place.
-      var marker = new google.maps.Marker({
-        map: map,
-        icon: icon,
-        title: place.name,
-        position: place.geometry.location,
-        id: place.place_id
-      });
-      placeMarkers.push(marker);
-    }
-
     </script>
 
     <script async defer
