@@ -22,83 +22,121 @@ function initMap() {
   // Create a styles array to use with the map.
   var styles = [
     {
-      featureType: 'water',
-      stylers: [
-        {color: '#19a0d8'}
+      "featureType": "administrative",
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+            "color": "#444444"
+        }
       ]
     },
     {
-      featureType: 'administrative',
-      elementType: 'labels.text.stroke',
-      stylers: [
-        {color: '#ffffff'},
-        {weight: 6}
+      "featureType": "landscape",
+      "elementType": "all",
+      "stylers": [
+        {
+            "color": "#f2f2f2"
+        }
       ]
     },
     {
-      featureType: 'administrative',
-      elementType: 'labels.text.fill',
-      stylers: [
-        {color: '#e85113'}
+      "featureType": "landscape.man_made",
+      "elementType": "geometry.fill",
+      "stylers": [
+        {
+            "lightness": "-10"
+        }
       ]
     },
     {
-      featureType: 'road.highway',
-      elementType: 'geometry.stroke',
-      stylers: [
-        {color: '#efe9e4'},
-        {lightness: -40}
+      "featureType": "poi",
+      "elementType": "all",
+      "stylers": [
+        {
+            "visibility": "off"
+        }
       ]
     },
     {
-      featureType: 'transit.station',
-      stylers: [
-        {weight: 9},
-        {hue: '#e85113'}
+      "featureType": "poi.park",
+      "elementType": "geometry.fill",
+      "stylers": [
+        {
+            "color": "#5cb85c"
+        },
+        {
+            "visibility": "on"
+        },
+        {
+            "lightness": "50"
+        }
       ]
     },
     {
-      featureType: 'road.highway',
-      elementType: 'labels.icon',
-      stylers: [
-        {visibility: 'off'}
+      "featureType": "road",
+      "elementType": "all",
+      "stylers": [
+        {
+            "saturation": -100
+        },
+        {
+            "lightness": 45
+        }
       ]
     },
     {
-      featureType: 'water',
-      elementType: 'labels.text.stroke',
-      stylers: [
-        {lightness: 100}
+      "featureType": "road.highway",
+      "elementType": "all",
+      "stylers": [
+        {
+            "visibility": "simplified"
+        }
       ]
     },
     {
-      featureType: 'water',
-      elementType: 'labels.text.fill',
-      stylers: [
-        {lightness: -100}
+      "featureType": "road.highway",
+      "elementType": "labels.icon",
+      "stylers": [
+        {
+            "visibility": "off"
+        }
       ]
     },
     {
-      featureType: 'poi',
-      elementType: 'geometry',
-      stylers: [
-        {visibility: 'on'},
-        {color: '#f0e4d3'}
+      "featureType": "road.arterial",
+      "elementType": "labels.icon",
+      "stylers": [
+        {
+            "visibility": "off"
+        }
       ]
     },
     {
-      featureType: 'road.highway',
-      elementType: 'geometry.fill',
-      stylers: [
-        {color: '#efe9e4'},
-        {lightness: -25}
+      "featureType": "water",
+      "elementType": "all",
+      "stylers": [
+        {
+            "color": "#91dcfa"
+        },
+        {
+            "visibility": "on"
+        }
+      ]
+    },
+    {
+      "featureType": "water",
+      "elementType": "geometry.fill",
+      "stylers": [
+        {
+            "color": "#337ab7"
+        }
       ]
     }
   ];
 
   var styledMapType = new google.maps.StyledMapType(
     styles,
-    {name: 'Bright Waters'}
+    {name: 'Mono'}
   );
 
   // Constructor creates a new map - only center and zoom are required.
@@ -108,11 +146,11 @@ function initMap() {
       mapTypeControlOptions: {
         //style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
         position: google.maps.ControlPosition.TOP_RIGHT,
-        mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain', 'bright_waters']
+        mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain', 'mono']
       }
   });
-  map.mapTypes.set('bright_waters', styledMapType);
-  map.setMapTypeId('bright_waters');
+  map.mapTypes.set('mono', styledMapType);
+  map.setMapTypeId('mono');
 
   // Set up traffic layers
   trafficLayer = new google.maps.TrafficLayer();
