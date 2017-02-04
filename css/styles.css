@@ -1,0 +1,46 @@
+html,
+body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+hr {
+	background: #D0D7D9;
+	height: 1px;
+	margin: 20px 0 20px 0;
+	border: none;
+}
+#map {
+	bottom:0px;
+	height: 100%;
+	left: 0px;
+	position: absolute;
+	right: 0px;
+}
+.options-box {
+	position: absolute;
+	margin-top: 10px;
+	box-shadow: 10px 10px 30px 0px rgba(0,0,0,0.75);
+	z-index: 1000;
+}
+.directions-box {
+	position: absolute;
+	box-shadow: 10px 10px 30px 0px rgba(0,0,0,0.75);
+	z-index: 1000;
+	top: 100px;
+	right: 10px;
+	display: none;
+}
+.scroll-panel {
+	max-height: 500px;
+	overflow-y: scroll;
+}
+#pano {
+	width: 200px;
+	height: 200px;
+}
+
+.top-row-margin {
+	margin-top: 0.5em;
+}
