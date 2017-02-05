@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      html,
+      body {
+        font-family: Arial, sans-serif;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      var map;
+      // Create a new blank array for all the listing markers.
+      var markers = [];
+      function initMap() {
+        // Constructor creates a new map - only center and zoom are required.
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 40.7413549, lng: -73.9980244},
+          zoom: 7
+        });
+        var locations = [
+          {title: 'Courthouse: Leaves at 1800 to go home, Comes back later that night at unknown time, Leaves again at 2338', location: {lat: 39.287014, lng: -76.617000}},
+          {title: 'Home: Arrives at unknown time, Get a phone call at 2300 and leaves', location: {lat: 39.212607, lng: -76.713581}},
+          {title: 'Pass Through FT. McHenry Toll Gate, Northbound at 2349', location: {lat: 39.266384, lng: -76.562270}},
+          {title: 'Pass Through Perryville, MD Toll Plaza, Northbound at 0028', location: {lat: 39.588529, lng: -76.072162}},
+          {title: 'Pass Through the Delaware Line Toll Plaza at 0028', location: {lat: 39.644941, lng: -75.764531}},
+          {title: 'ATM Withdrawl JFK Plaza at 0057', location: {lat: 39.662674, lng: -75.690444}},
+          {title: 'Enter New Jersey Turnpike at 0237', location: {lat:  39.679983, lng: -75.492768}},
+          {title: 'Enter Pennsylvania Turnpike at 0247', location: {lat:  40.096802, lng: -74.777390}},
+          {title: 'Enter King of Prussia Service Plaza at 0320', location: {lat:  40.090021, lng: -75.371052}},
+          {title: 'Luna Allegedly Spotted at Roy Rogers at unknown time (Between 0320 and 0404)', location: {lat:  40.156810, lng: -75.833059}},
+          {title: 'Exit Pa Turnpike at Reading-Lancaster Interchange at 0404', location: {lat:  40.214653, lng: -76.083415}},
+          {title: 'Luna'+ 's Body Found in the Creek Along Dry Tavern Rd. at 0530', location: {lat:  40.210422, lng: -76.058210}}
+
+        ];
+        var largeInfowindow = new google.maps.InfoWindow();
+        var bounds = new google.maps.LatLngBounds();
+        // The following group uses the location array to create an array of markers on initialize.
+        for (var i = 0; i < locations.length; i++) {
+          // Get the position from the location array.
+          var position = locations[i].location;
+          var title = locations[i].title;
+          // Create a marker per location, and put into markers array.
+          var marker = new google.maps.Marker({
+            map: map,
+            position: position,
+            title: title,
+            animation: google.maps.Animation.DROP,
+            id: i
+          });
+          // Push the marker to our array of markers.
+          markers.push(marker);
+          // Create an onclick event to open an infowindow at each marker.
+          marker.addListener('click', function() {
+            populateInfoWindow(this, largeInfowindow);
+          });
+          bounds.extend(markers[i].position);
+        }
+        // Extend the boundaries of the map for each marker
+        map.fitBounds(bounds);
+      }
+      // This function populates the infowindow when the marker is clicked. We'll only allow
+      // one infowindow which will open at the marker that is clicked, and populate based
+      // on that markers position.
+      function populateInfoWindow(marker, infowindow) {
+        // Check to make sure the infowindow is not already opened on this marker.
+        if (infowindow.marker != marker) {
+          infowindow.marker = marker;
+          infowindow.setContent('<div>' + marker.title + '</div>');
+          infowindow.open(map, marker);
+          // Make sure the marker property is cleared if the infowindow is closed.
+          infowindow.addListener('closeclick',function(){
+            infowindow.setMarker(null);
+          });
+        }
+      }
+    </script>
+
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?AIzaSyABdOircZ5VKhIRXBZMHhHhOLtTua7S6tw&callback=initMap">
+    </script>
+
+  </body>
+</html>
