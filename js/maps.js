@@ -18,6 +18,11 @@ var bikeLayer = null;
 // Route layers
 var directionsDisplay = null;
 
+// Place details
+var currentPlace = null;
+var currentPhoto = 0;
+
+// Main entry point
 function initMap() {
   // Create a styles array to use with the map.
   var styles = [
@@ -749,19 +754,61 @@ function getPlacesDetails(marker, infowindow) {
             place.opening_hours.weekday_text[6];
         }
         if (place.photos) {
-          innerHTML += '<br><br><img src="' + place.photos[0].getUrl(
+          innerHTML += '<br><br><img id="' + place.id + '_photo" src="' + place.photos[0].getUrl(
             {maxHeight: 100, maxWidth: 200}) + '">';
+          if (place.photos.length > 1)
+          {
+            innerHTML += '<br>';
+            innerHTML += place.photos.length + ' photos: ';
+            innerHTML += '<a onclick="previousPhoto()">Prev</a> ';
+            innerHTML += '<a onclick="nextPhoto()">Next</a>';           
+          }
         }
         innerHTML += '</div>';
         infowindow.setContent(innerHTML);
+        currentPlace = place;
         infowindow.open(map, marker);
         // Make sure the marker property is cleared if the infowindow is closed.
         infowindow.addListener('closeclick', function() {
           infowindow.marker = null;
+          currentPlace = null;
+          currentPhoto = 0;
         });
       }
     }
   );
+}
+
+// Get next photo
+function nextPhoto() {
+  if (currentPlace) {
+    var totalPhotos = currentPlace.photos.length;
+    var next = currentPhoto + 1;
+    if (next >= totalPhotos) next = 0;
+    
+    $('#' + currentPlace.id + '_photo').attr(
+      'src',
+      currentPlace.photos[next].getUrl({maxHeight: 100, maxWidth: 200})
+    );
+        
+    currentPhoto = next;
+  }
+}
+
+// Get previous photo
+function previousPhoto() {
+  if (currentPlace) {
+    var totalPhotos = currentPlace.photos.length;
+    var next = currentPhoto - 1;
+    if (next < 0) next = totalPhotos - 1;
+    
+    $('#' + currentPlace.id + '_photo').attr(
+      'src',
+      currentPlace.photos[next].getUrl({maxHeight: 100, maxWidth: 200})
+    );
+        
+    currentPhoto = next;
+  }
 }
 
 // Hide all of the transport layers, and reset their toggle buttons
