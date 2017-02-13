@@ -4,165 +4,98 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="js/maps.js"></script>
 	
-	  <!-- Addition custom styles -->
+	  <!-- Styles -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet" />
 </head>
 <body>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="pull-left col-xs-3">
-        <div class="panel panel-primary options-box">
-          <div class="panel-heading"><h1 class="panel-title">Find Your New NYC Home</h1></div>
-          <div class="panel-body">
-            <div class="row">
-              <div class="form-group col-xs-6"><input id="show-listings" type="button" value="Show Listings" class="form-control"></div>
-              <div class="form-group col-xs-6"><input id="hide-listings" type="button" value="Hide Listings" class="form-control"></div>
-            </div>
-
-            <div class="row">
-              <div class="col-xs-12">
-                <div class="btn-group btn-group-justified" role="group">
-                  <div class="btn-group" role="group">
-                    <input id="toggle-traffic" type="button" value="Traffic" class="btn btn-default">
-                  </div>
-                  <div class="btn-group" role="group">
-                    <input id="toggle-transit" type="button" value="Transit" class="btn btn-default">
-                  </div>
-                  <div class="btn-group" role="group">
-                    <input id="toggle-bicycling" type="button" value="Bicycling" class="btn btn-default">
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-xs-12">
-                <h4 class="h4">Draw a shape to search within it for homes!</h4>
-                <div class="form-group"><input id="toggle-drawing" type="button" value="Display Drawing Tools" class="form-control btn btn-primary"></div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-xs-12">
-                <div class="input-group">
-                  <input id="zoom-to-area-text" type="text" placeholder="Enter your favorite area!" class="form-control">
-                  <span class="input-group-btn">
-                    <input id="zoom-to-area" type="button" value="Zoom" class="btn btn-default" />
-                  </span>
-                </div>
-              </div>
-            </div>
-            <hr>
-
-            <div class="row">
-              <div class="col-xs-12">
-                <label for="places-search">Search for listings within:</label>
-                <div class="form-inline">
-                  <div class="form-group">
-                    <select id="max-duration" class="form-control">
-                      <option value="10">10 min</option>
-                      <option value="15">15 min</option>
-                      <option value="30">30 min</option>
-                      <option value="60">1 hour</option>
-                    </select>
-                    <select id="mode" class="form-control">
-                      <option value="DRIVING">drive</option>
-                      <option value="WALKING">walk</option>
-                      <option value="BICYCLING">bike</option>
-                      <option value="TRANSIT">transit ride</option>
-                    </select>
-                    of:
-                  </div>
-                </div>
-                <div class="input-group top-row-margin">
-                  <input id="search-within-time-text" type="text" placeholder="Ex: Google Office NYC or 75 9th Ave, New York, NY" class="form-control">
-                  <span class="input-group-btn">
-                    <input id="search-within-time" type="button" value="Go" class="btn btn-default" />
-                  </span>
-                </div>
-              </div>
-            </div>
-            <hr>
-
-            <div class="row">
-              <div class="col-xs-12">
-                <label for="places-search">Search for nearby places</label>
-                <div class="input-group">
-                  <input id="places-search" type="text" placeholder="Ex: Pizza delivery in NYC" class="form-control">
-                  <span class="input-group-btn">
-                    <input id="go-places" type="button" value="Go" class="btn btn-default" />
-                  </span>
-                </div>
-              </div>
-            </div>
-            <hr>
-
-            <div class="row">
-              <div class="col-xs-12">
-                <div class="form-group">
-                  <input id="show-about" type="button" value="About This Page" class="form-control btn btn-primary"
-                      data-toggle="modal" data-target="#about-modal">
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <div class="pull-right col-xs-3">
-        <div class="panel panel-primary directions-box" id="directions-panel">
-          <div class="panel-heading">
-            <button type="button" class="close" id="directions-close-button" aria-label="Close">
-              <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-            </button>
-            <h3 class="panel-title">Directions</h3>
-          </div>
-          <div class="panel-body scroll-panel">
-            <div id="directions"></div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <section id="header">
+    
+    <h1><i class="material-icons">home</i> Find Your New NYC Home</h1>
+  </section>
+  
+  <section id="content">
+    <!-- The map itself -->
     <div id="map"></div>
-  </div>
-
-  <div class="modal fade" id="about-modal" tabindex="-1" role="dialog" aria-labelledby="about-label">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="about-label">About this page</h4>
-        </div>
-        <div class="modal-body">
-          <p>This page started by following along with Udacity's
-          <a href="https://www.udacity.com/course/google-maps-apis--ud864" target="_blank">Google
-          Maps API course</a>. Most of the starter code came from there originally (check out their
-          <a href="https://github.com/udacity/ud864" target="_blank">GitHub repo</a>).</p>
-          
-          <p>This version has a few changes. It uses jQuery and Bootstrap to clean up the scripts
-          and presentation a little. It also works through some of the exercises not covered by
-          the instructors, such as:</p>
-          
-          <ul>
-            <li>Adding a toggleable traffic layer</li>
-            <li>Toggleable styled maptype option</li>
-            <li>Nice little directions panel when you click 'Show Route' (Use the
-              'Search for listings within' section and click on any listings that
-              show up to see this function in action)</li>
-          </ul>
-          
-          <p>There are a couple of exercises to complete, and I've a few ideas for finishing
-            touches. Stay tuned!</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
+    
+    <!-- Main control panel -->
+    <div id="control-panel">
+      
+      <input id="show-listings" type="button" value="Show Listings">
+      <input id="hide-listings" type="button" value="Hide Listings">
+      
+      <br>
+      
+      <input id="toggle-traffic" type="button" value="Traffic">
+      <input id="toggle-transit" type="button" value="Transit">
+      <input id="toggle-bicycling" type="button" value="Bicycling">
+      
+      <h4 class="h4">Draw a shape to search within it for homes!</h4>
+      <input id="toggle-drawing" type="button" value="Display Drawing Tools">
+      
+      <input id="zoom-to-area-text" type="text" placeholder="Enter your favorite area!">
+      <input id="zoom-to-area" type="button" value="Zoom" />
+      
+      <label for="places-search">Search for listings within:</label>
+      <select id="max-duration">
+        <option value="10">10 min</option>
+        <option value="15">15 min</option>
+        <option value="30">30 min</option>
+        <option value="60">1 hour</option>
+      </select>
+      <select id="mode">
+        <option value="DRIVING">drive</option>
+        <option value="WALKING">walk</option>
+        <option value="BICYCLING">bike</option>
+        <option value="TRANSIT">transit ride</option>
+      </select>
+      of:
+      <input id="search-within-time-text" type="text" placeholder="Ex: Google Office NYC or 75 9th Ave, New York, NY">
+      <input id="search-within-time" type="button" value="Go" />
+      
+      <label for="places-search">Search for nearby places</label>
+      <input id="places-search" type="text" placeholder="Ex: Pizza delivery in NYC">
+      <input id="go-places" type="button" value="Go" />
+      
+      <input id="show-about" type="button" value="About This Page" data-toggle="modal" data-target="#about-modal">
     </div>
-  </div>
- 
-   <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry,drawing&key=AIzaSyB5J2C-JxcCRTEkwdt9Ur1or57OQmabOYQ&v=3&callback=initMap">
+
+    <!-- Directions panel (populated dynamically) -->
+    <div id="directions-panel">
+      <h3 class="panel-title">Directions</h3>
+      <div id="directions"></div>
+    </div>
+              
+    <!-- Modal 'About' box -->
+    <div id="about-modal">
+      <h4 id="about-label">About this page</h4>
+      <p>This page started by following along with Udacity's
+      <a href="https://www.udacity.com/course/google-maps-apis--ud864" target="_blank">Google
+      Maps API course</a>. Most of the starter code came from there originally (check out their
+      <a href="https://github.com/udacity/ud864" target="_blank">GitHub repo</a>).</p>
+      
+      <p>This version has a few changes. It uses jQuery to clean up the scripts, and I've put
+      my own stamp on the UI. It also works through some of the exercises not covered by
+      the instructors, such as:</p>
+      
+      <ul>
+        <li>Adding a toggleable traffic layer</li>
+        <li>Toggleable styled maptype option</li>
+        <li>Nice little directions panel when you click 'Show Route' (Use the
+          'Search for listings within' section and click on any listings that
+          show up to see this function in action)</li>
+        <li>Scroll through photos within the infobox if available</li>
+      </ul>
+      
+      <p>I've a few ideas for finishing touches. Stay tuned!</p>
+      
+      <button type="button" data-dismiss="modal">Close</button>
+    </div>
+  </section>
+  
+  <!-- Google Maps API --> 
+  <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry,drawing&key=AIzaSyB5J2C-JxcCRTEkwdt9Ur1or57OQmabOYQ&v=3&callback=initMap">
    </script>
  </body>
 </html>
