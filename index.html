@@ -5,38 +5,37 @@
     <script src="js/maps.js"></script>
 	
 	  <!-- Styles -->
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet" />
 </head>
 <body>
-  <section id="header">
-    
+  <section id="header"> 
     <h1>Find Your New NYC Home</h1>
-    <ul id="main_controls">
-      <li><a id="toggle-listings type="button" title="Toggle Listings"><i class="material-icons">home</i></a></li>
-      <li><a id="toggle-traffic type="button" title="Toggle Traffic"><i class="material-icons">directions_car</i></a></li>
-    </ul>
   </section>
   
   <section id="content">
     <!-- The map itself -->
     <div id="map"></div>
+
+    <!-- Main Controls -->
+    <ul id="main_controls">
+      <li class="separator"><a id="toggle-listings" type="button" title="Toggle Listings"><i class="material-icons">home</i></a></li>
+
+      <li><a id="toggle-traffic" type="button" title="Toggle Traffic"><i class="material-icons">directions_car</i></a></li>
+      <li><a id="toggle-transit" type="button" title="Toggle Transit"><i class="material-icons">directions_transit</i></a></li>
+      <li class="separator"><a id="toggle-bicycling" type="button" title="Toggle Bikes"><i class="material-icons">directions_bike</i></a></li>
+
+      <li><a id="hand-tool" type="button" title="Move Map" class="selected"><i class="material-icons">pan_tool</i></a></li>
+      <li><a id="toggle-drawing-polygon" type="button" title="Toggle Polygon Selection"><i class="material-icons">timeline</i></a></li>
+      <li><a id="toggle-drawing-rectangle" type="button" title="Toggle Rectangle Selection"><i class="material-icons">crop_square</i></a></li>
+     <li><a id="toggle-drawing-circle" type="button" title="Toggle Circular Selection"><i class="material-icons">panorama_fish_eye</i></a></li>
+    </ul>
     
     <!-- Main control panel -->
     <div id="control-panel">
-      
-      <input id="show-listings" type="button" value="Show Listings">
-      <input id="hide-listings" type="button" value="Hide Listings">
-      
-      <br>
-      
-      <input id="toggle-traffic" type="button" value="Traffic">
-      <input id="toggle-transit" type="button" value="Transit">
-      <input id="toggle-bicycling" type="button" value="Bicycling">
-      
-      <h4 class="h4">Draw a shape to search within it for homes!</h4>
-      <input id="toggle-drawing" type="button" value="Display Drawing Tools">
+      <!--<h4 class="h4">Draw a shape to search within it for homes!</h4>
+      <input id="toggle-drawing" type="button" value="Display Drawing Tools">-->
       
       <input id="zoom-to-area-text" type="text" placeholder="Enter your favorite area!">
       <input id="zoom-to-area" type="button" value="Zoom" />

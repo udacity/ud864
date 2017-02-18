@@ -5,6 +5,7 @@ var markers = [];
 
 // This global polygon variable is to ensure only ONE polygon is rendered.
 var polygon = null;
+var currentDrawingTool = null;
 
 // Create placemarkers array to use in multiple functions to have control
 // over the number of places that show.
@@ -165,9 +166,9 @@ function initMap() {
   trafficLayer.setMap(null);
   transitLayer.setMap(null);
   bikeLayer.setMap(null);
-$('#toggle-traffic').on('click', toggleTraffic);
-$('#toggle-transit').on('click', toggleTransit);
-$('#toggle-bicycling').on('click', toggleBicycling);
+  $('#toggle-traffic').on('click', toggleTraffic);
+  $('#toggle-transit').on('click', toggleTransit);
+  $('#toggle-bicycling').on('click', toggleBicycling);
 
   $('#directions-close-button').on('click', removeDirectionsPanel);
 
@@ -202,13 +203,7 @@ $('#toggle-bicycling').on('click', toggleBicycling);
   // Initialize the drawing manager.
   var drawingManager = new google.maps.drawing.DrawingManager({
       drawingMode: google.maps.drawing.OverlayType.POLYGON,
-      drawingControl: true,
-      drawingControlOptions: {
-        position: google.maps.ControlPosition.TOP_RIGHT,
-        drawingModes: [
-          google.maps.drawing.OverlayType.POLYGON
-        ]
-      }
+      drawingControl: false
   });
 
   // Style the markers a bit. This will be our listing marker icon.
@@ -241,13 +236,24 @@ $('#toggle-bicycling').on('click', toggleBicycling);
     addMarkerEvents(marker, largeInfowindow, defaultIcon, highlightedIcon);
   }
 
-  $('#show-listings').on('click', showListings);
-  $('#hide-listings').on('click', function() {
-    hideMarkers(markers);
+  $('#toggle-listings').on('click', function() {
+    toggleListings(markers);
   });
-  $('#toggle-drawing').on('click', function() {
-    toggleDrawing(drawingManager);
+
+  $('#hand-tool').on('click', function() {
+    disableDrawing(drawingManager);
   });
+
+  $('#toggle-drawing-polygon').on('click', function() {
+    toggleDrawing(drawingManager, google.maps.drawing.OverlayType.POLYGON, $(this));
+  });
+  $('#toggle-drawing-rectangle').on('click', function() {
+    toggleDrawing(drawingManager, google.maps.drawing.OverlayType.RECTANGLE, $(this));
+  });
+  $('#toggle-drawing-circle').on('click', function() {
+    toggleDrawing(drawingManager, google.maps.drawing.OverlayType.CIRCLE, $(this));
+  });
+
   $('#zoom-to-area').on('click', zoomToArea);
   $('#search-within-time').on('click', searchWithinTime);
 
@@ -273,18 +279,18 @@ $('#toggle-bicycling').on('click', toggleBicycling);
     }
 
     // Switching the drawing mode to the HAND (i.e., no longer drawing).
-    drawingManager.setDrawingMode(null);
+    //drawingManager.setDrawingMode(null);
 
     // Creating a new editable polygon from the overlay.
     polygon = event.overlay;
-    polygon.setEditable(true);
+    //polygon.setEditable(true);
 
     // Searching within the polygon.
-    searchWithinPolygon(polygon);
+    searchWithinPolygon(polygon, drawingManager);
 
-    // Make sure the search is re-done if the poly is changed.
-    polygon.getPath().addListener('set_at', searchWithinPolygon);
-    polygon.getPath().addListener('insert_at', searchWithinPolygon);
+    // Make sure the search is re-done if the poly is changed (only relevant if editable).
+    //polygon.getPath().addListener('set_at', searchWithinPolygon);
+    //polygon.getPath().addListener('insert_at', searchWithinPolygon);
   });
 }
 
@@ -353,8 +359,20 @@ function populateInfoWindow(marker, infowindow) {
   }
 }
 
+// Toggle the display of available listings.
+function toggleListings(markers) {
+  var listingButton = $('#toggle-listings');
+  if (listingButton.hasClass('selected')) {
+    listingButton.removeClass('selected');
+    hideMarkers(markers);
+  } else {
+    listingButton.addClass('selected');
+    showListings(markers);
+  }
+}
+
 // This function will loop through the markers array and display them all.
-function showListings() {
+function showListings(markers) {
   var bounds = new google.maps.LatLngBounds();
   // Extend the boundaries of the map for each marker and display the marker
   for (var i = 0; i < markers.length; i++) {
@@ -385,31 +403,89 @@ function makeMarkerIcon(markerColor) {
 }
 
 // This shows and hides (respectively) the drawing options.
-function toggleDrawing(drawingManager) {
-  if (drawingManager.map) {
+function toggleDrawing(drawingManager, drawingmode, caller) {
+  $('#hand-tool').removeClass('selected');
+  deselectDrawingTools();
+  
+  if (drawingManager.map && caller === currentDrawingTool) {
     drawingManager.setMap(null);
     // In case the user drew anything, get rid of the polygon
     if (polygon !== null) {
       polygon.setMap(null);
     }
-    $('#toggle-drawing').removeClass('active');
   } else {
     drawingManager.setMap(map);
-    $('#toggle-drawing').addClass('active');
+    drawingManager.setDrawingMode(drawingmode);
+    if (polygon !== null) {
+      polygon.setMap(null);
+    }
+    caller.addClass('selected');
+    currentDrawingTool = caller;
+  }
+}
+
+// Deselect all drawing tool icons.
+function deselectDrawingTools() {
+  $('#toggle-listings').removeClass('selected');
+  $('#toggle-drawing-polygon').removeClass('selected');
+  $('#toggle-drawing-rectangle').removeClass('selected');
+  $('#toggle-drawing-circle').removeClass('selected');
+}
+
+// Disable drawing functions
+function disableDrawing(drawingManager) {
+  deselectDrawingTools();
+  $('#hand-tool').addClass('selected');
+  if (drawingManager.map) {
+    drawingManager.setMap(null);
+  }
+  if (polygon !== null) {
+    polygon.setMap(null);
   }
 }
 
 // This function hides all markers outside the polygon,
 // and shows only the ones within it. This is so that the
 // user can specify an exact area of search.
-function searchWithinPolygon() {
+function searchWithinPolygon(polygon, drawingManager) {
+  var markerCount = 0;
   for (var i = 0; i < markers.length; i++) {
-    if (google.maps.geometry.poly.containsLocation(markers[i].position, polygon)) {
+    //if (google.maps.geometry.poly.containsLocation(markers[i].position, polygon)) {
+    if (isWithinCurrentShape(markers[i].position, polygon)) {
       markers[i].setMap(map);
+      markerCount++;
     } else {
       markers[i].setMap(null);
     }
   }
+  deselectDrawingTools();
+  if (markerCount > 0) {
+    $('#toggle-listings').addClass('selected');
+  } else {
+    $('#toggle-listings').removeClass('selected');
+  }
+  $('#hand-tool').addClass('selected');
+  if (drawingManager.map) {
+    drawingManager.setMap(null);
+  }
+}
+
+// Determine if a position is within the current drawing tool
+function isWithinCurrentShape(position, shape) {
+  var currentShape = currentDrawingTool[0].id;
+  if (currentShape) {
+    currentShape = currentShape.split('-').pop();
+    if (currentShape === 'polygon') {
+      return google.maps.geometry.poly.containsLocation(position, shape);
+    }
+    if (currentShape === 'rectangle') {
+      return shape.getBounds().contains(position);
+    }
+    if (currentShape === 'circle') {
+      return google.maps.geometry.spherical.computeDistanceBetween(position, shape.getCenter()) <= shape.getRadius();
+    }
+  }
+  return false;
 }
 
 // This function takes the input value in the find nearby area text input
@@ -817,9 +893,9 @@ function hideLayers() {
   transitLayer.setMap(null);
   bikeLayer.setMap(null);
 
-  $('#toggle-traffic').removeClass('active');
-  $('#toggle-transit').removeClass('active');
-  $('#toggle-bicycling').removeClass('active');
+  $('#toggle-traffic').removeClass('selected');
+  $('#toggle-transit').removeClass('selected');
+  $('#toggle-bicycling').removeClass('selected');
 }
 
 // Toggle the traffic button and layer
@@ -827,10 +903,10 @@ function toggleTraffic() {
   if (trafficLayer.getMap() === null) {
     hideLayers();
     trafficLayer.setMap(map);
-    $('#toggle-traffic').addClass('active');
+    $('#toggle-traffic').addClass('selected');
   } else {
     trafficLayer.setMap(null);
-    $('#toggle-traffic').removeClass('active');
+    $('#toggle-traffic').removeClass('selected');
   }
 }
 
@@ -839,10 +915,10 @@ function toggleTransit() {
   if (transitLayer.getMap() === null) {
     hideLayers();
     transitLayer.setMap(map);
-    $('#toggle-transit').addClass('active');
+    $('#toggle-transit').addClass('selected');
   } else {
     transitLayer.setMap(null);
-    $('#toggle-transit').removeClass('active');
+    $('#toggle-transit').removeClass('selected');
   }
 }
 
@@ -851,9 +927,9 @@ function toggleBicycling() {
   if (bikeLayer.getMap() === null) {
     hideLayers();
     bikeLayer.setMap(map);
-    $('#toggle-bicycling').addClass('active');
+    $('#toggle-bicycling').addClass('selected');
   } else {
     bikeLayer.setMap(null);
-    $('#toggle-bicycling').removeClass('active');
+    $('#toggle-bicycling').removeClass('selected');
   }
 }
