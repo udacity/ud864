@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="js/maps.js"></script>
+	
+	  <!-- Styles -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet" />
+</head>
+<body>
+  <section id="header"> 
+    <h1>Find Your New NYC Home</h1>
+  </section>
+  
+  <section id="content">
+    <!-- The map itself -->
+    <div id="map"></div>
+
+    <!-- Main Controls -->
+    <ul id="main_controls">
+      <li class="separator"><a id="toggle-listings" type="button" title="Toggle Listings"><i class="material-icons">home</i></a></li>
+
+      <li><a id="toggle-traffic" type="button" title="Toggle Traffic"><i class="material-icons">directions_car</i></a></li>
+      <li><a id="toggle-transit" type="button" title="Toggle Transit"><i class="material-icons">directions_transit</i></a></li>
+      <li class="separator"><a id="toggle-bicycling" type="button" title="Toggle Bikes"><i class="material-icons">directions_bike</i></a></li>
+
+      <li><a id="hand-tool" type="button" title="Move Map" class="selected"><i class="material-icons">pan_tool</i></a></li>
+      <li><a id="toggle-drawing-polygon" type="button" title="Toggle Polygon Selection"><i class="material-icons">timeline</i></a></li>
+      <li><a id="toggle-drawing-rectangle" type="button" title="Toggle Rectangle Selection"><i class="material-icons">crop_square</i></a></li>
+     <li><a id="toggle-drawing-circle" type="button" title="Toggle Circular Selection"><i class="material-icons">panorama_fish_eye</i></a></li>
+    </ul>
+    
+    <!-- Main control panel -->
+    <div id="control-panel">
+      <!--<h4 class="h4">Draw a shape to search within it for homes!</h4>
+      <input id="toggle-drawing" type="button" value="Display Drawing Tools">-->
+      
+      <input id="zoom-to-area-text" type="text" placeholder="Enter your favorite area!">
+      <input id="zoom-to-area" type="button" value="Zoom" />
+      
+      <label for="places-search">Search for listings within:</label>
+      <select id="max-duration">
+        <option value="10">10 min</option>
+        <option value="15">15 min</option>
+        <option value="30">30 min</option>
+        <option value="60">1 hour</option>
+      </select>
+      <select id="mode">
+        <option value="DRIVING">drive</option>
+        <option value="WALKING">walk</option>
+        <option value="BICYCLING">bike</option>
+        <option value="TRANSIT">transit ride</option>
+      </select>
+      of:
+      <input id="search-within-time-text" type="text" placeholder="Ex: Google Office NYC or 75 9th Ave, New York, NY">
+      <input id="search-within-time" type="button" value="Go" />
+      
+      <label for="places-search">Search for nearby places</label>
+      <input id="places-search" type="text" placeholder="Ex: Pizza delivery in NYC">
+      <input id="go-places" type="button" value="Go" />
+      
+      <input id="show-about" type="button" value="About This Page" data-toggle="modal" data-target="#about-modal">
+    </div>
+
+    <!-- Directions panel (populated dynamically) -->
+    <div id="directions-panel">
+      <h3 class="panel-title">Directions</h3>
+      <div id="directions"></div>
+    </div>
+              
+    <!-- Modal 'About' box -->
+    <div id="about-modal">
+      <h4 id="about-label">About this page</h4>
+      <p>This page started by following along with Udacity's
+      <a href="https://www.udacity.com/course/google-maps-apis--ud864" target="_blank">Google
+      Maps API course</a>. Most of the starter code came from there originally (check out their
+      <a href="https://github.com/udacity/ud864" target="_blank">GitHub repo</a>).</p>
+      
+      <p>This version has a few changes. It uses jQuery to clean up the scripts, and I've put
+      my own stamp on the UI. It also works through some of the exercises not covered by
+      the instructors, such as:</p>
+      
+      <ul>
+        <li>Adding a toggleable traffic layer</li>
+        <li>Toggleable styled maptype option</li>
+        <li>Nice little directions panel when you click 'Show Route' (Use the
+          'Search for listings within' section and click on any listings that
+          show up to see this function in action)</li>
+        <li>Scroll through photos within the infobox if available</li>
+      </ul>
+      
+      <p>I've a few ideas for finishing touches. Stay tuned!</p>
+      
+      <button type="button" data-dismiss="modal">Close</button>
+    </div>
+  </section>
+  
+  <!-- Google Maps API --> 
+  <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry,drawing&key=AIzaSyB5J2C-JxcCRTEkwdt9Ur1or57OQmabOYQ&v=3&callback=initMap">
+   </script>
+ </body>
+</html>
